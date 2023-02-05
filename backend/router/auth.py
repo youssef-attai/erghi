@@ -7,7 +7,7 @@ from utils import verify_password
 from pymongo.collection import Collection
 
 
-router = APIRouter(prefix="/auth")
+router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
 @router.post("/token")
