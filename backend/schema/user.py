@@ -3,7 +3,8 @@ from pydantic import BaseModel
 
 from model.profile import Profile
 
-class CreateUserSchema(BaseModel):
+
+class CreateUser(BaseModel):
     username: str
     password: str
 
