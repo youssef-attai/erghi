@@ -2,7 +2,7 @@ from datetime import timedelta
 from fastapi import Depends, APIRouter, HTTPException, status
 from auth.jwt_utils import create_access_token
 from fastapi.security import OAuth2PasswordRequestForm
-from database import get_users_collection
+from database.collections import get_users_collection
 from utils import verify_password
 from pymongo.collection import Collection
 
