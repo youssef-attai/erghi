@@ -1,4 +1,78 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+  font-family: 'Sora', sans-serif;
+}
+
+*::selection {
+  background: #a855f7;
+}
+
+html,
+body,
+.container {
+  height: 100vh;
+  background: #1c1917;
+}
+
+.top-bar {
+  position: fixed;
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-bar > * {
+  padding: 1em;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: #292524;
+  border: 2px solid #44403c;
+  border-radius: 2em;
+  padding: 2em;
+  gap: 1em;
+}
+
+.card > a {
+  font-size: smaller;
+}
+
+input:focus {
+  outline: none;
+}
+
+input[type="text"],
+input[type="password"] {
+  background: #c084fc;
+  border: 2px solid #a855f7;
+  padding: 1em;
+  border-radius: 2em;
+  color: #581c87;
+}
+
+button {
+  margin: 0 auto;
+  background: #581c87;
+  border: 2px solid #7e22ce;
+  padding: 1em 2em;
+  border-radius: 2em;
+  color: #c084fc;
+  cursor: pointer;
+}
+
+a {
+  color: #d6d3d1;
+  text-decoration: none;
+}
