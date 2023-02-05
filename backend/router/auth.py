@@ -33,7 +33,7 @@ async def create_token(
         raise credentials_exception
 
     token = create_access_token({
-        'sub': username
+        'sub': str(user["_id"])
     }, timedelta(minutes=10))
 
     return {
