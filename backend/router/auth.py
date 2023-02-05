@@ -24,7 +24,7 @@ async def create_token(
     username = form.username
     password = form.password
 
-    user = users_collection.find_one({"username": username})
+    user = users_collection.find_one({"profile.username": username})
 
     if user is None:
         raise credentials_exception
