@@ -5,5 +5,5 @@ from pydantic import BaseModel
 
 class User(BaseModel):
     profile: Profile
-    rooms: List[Dict[str, Profile]]
+    rooms: Dict[str, Dict[str, Profile]]
     password: str
