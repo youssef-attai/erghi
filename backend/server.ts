@@ -1,11 +1,11 @@
-import express from 'express'
+import express, { Express } from 'express'
 
 import authRouter from './routers/auth.js';
 
 import { PORT } from './env.js';
-import './database.js';
+import './database/database.js';
 
-const app = express()
+const app: Express = express()
 
 app.use('/auth', authRouter);
 
