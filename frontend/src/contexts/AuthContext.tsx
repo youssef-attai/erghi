@@ -33,8 +33,18 @@ const AuthProvider = ({ children }: ChildrenType) => {
     return true
   }
 
-  // TODO: Create the sign up function like the login funciton
-  // TODO: pass the signup function
+  const logout: LogoutFunction = async () => {
+    try {
+      await authClient.get('/logout')
+
+      setAccessToken('')
+      setCurrentUser(undefined)
+
+      return true
+    } catch (error) {
+      return false
+    }
+  }
 
   const contextValue: AuthContextValue = { login, signUp, logout, refreshAccessToken, currentUser, setCurrentUser, accessToken }
 
