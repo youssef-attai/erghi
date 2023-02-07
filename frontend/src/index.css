@@ -12,24 +12,39 @@
 
 html,
 body,
-.container {
-  height: 100vh;
+#root {
+  height: 100%;
   background: #1c1917;
 }
 
+#root {
+  height: 95%;
+  margin: 0 2em;
+  padding: 1em 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 .top-bar {
-  position: fixed;
-  width: 100vw;
+  z-index: 2;
+  background: #1c1917;
+  width: 100%;
+  height: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.top-bar > * {
+.top-bar>* {
   padding: 1em;
 }
 
 .container {
+  width: 100%;
+  flex-grow: 1;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -38,15 +53,65 @@ body,
 .card {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background: #292524;
   border: 2px solid #44403c;
   border-radius: 2em;
-  padding: 2em;
+  padding: 1em;
   gap: 1em;
+  margin: 0.5em;
 }
 
-.card > a {
-  font-size: smaller;
+.chat-container {
+  display: flex;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.chat-container>.sidecard {
+  max-width: 250px;
+  justify-content: flex-start;
+}
+
+.chat-container>.maincard {
+  flex-grow: 1;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.contacts-area {
+  width: 100%;
+  height: 100%;
+}
+
+.buttons-area {
+  width: 100%;
+  display: flex;
+}
+
+.messages-area {
+  width: 100%;
+  height: 100%;
+}
+
+.maincard>input {
+  width: 90%;
+}
+
+.card>a {
+  color: #A8A29E;
+  font-size: x-small;
+}
+
+.card>a:hover {
+  color: #a855f7;
+}
+
+.card.room-card {
+  border-radius: 1.2em;
+  color: #FAF5FF;
 }
 
 input:focus {
@@ -54,12 +119,29 @@ input:focus {
 }
 
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="search"] {
   background: #c084fc;
   border: 2px solid #a855f7;
   padding: 1em;
   border-radius: 2em;
   color: #581c87;
+  transition: background 0.3s, color 0.3s, border 0.3s;
+}
+
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus {
+  background: #1c1917;
+  color: #a855f7;
+}
+
+input[type="text"]:hover:not(:focus),
+input[type="password"]:hover:not(:focus),
+input[type="search"]:hover:not(:focus) {
+  background: #b27aeb;
+  border-color: #9422ff;
 }
 
 button {
@@ -68,11 +150,23 @@ button {
   border: 2px solid #7e22ce;
   padding: 1em 2em;
   border-radius: 2em;
-  color: #c084fc;
+  color: #9c43e9;
   cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: #3a0d5c;
+  color: #7e22ce;
+}
+
+button:active {
+  background: #30074e;
+  color: #9c43e9;
 }
 
 a {
-  color: #d6d3d1;
+  transition: color 0.2s;
+  color: inherit;
   text-decoration: none;
 }
