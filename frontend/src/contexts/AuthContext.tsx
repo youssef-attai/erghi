@@ -7,11 +7,19 @@ export type LoginProps = {
     login: (username: string, password: string) => Promise<boolean>
 }
 
-const AuthContext = createContext({} as LoginProps)
 
-type ChildrenType = {
-  children: ReactNode
-}
+  const login: LoginFunction = async (username: string, password: string) => {
+    const { data: { accessToken: token, user } } = await authClient.post<{ accessToken: string, user: User }>('/login', { username, password }, {
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+    })
+
+    setAccessToken(token)
+    setCurrentUser(user)
+    return true
+  }
 
   const signUp: SignUpFunction = async (username: string, password: string, confirmPassword: string) => {
     const { data: { accessToken: token, user } } = await authClient.post<{ accessToken: string, user: User }>('/new', { username, password }, {
