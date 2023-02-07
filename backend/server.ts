@@ -7,6 +7,7 @@ import './database/database.js';
 
 const app: Express = express()
 
+app.use(cookieParser())
 app.use(cors())
 
 app.listen(PORT, () => {
