@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link, Outlet, redirect } from 'react-router-dom'
 import { LogoutFunction, useAuth } from './contexts/AuthContext'
 
@@ -9,6 +10,12 @@ export const logoutAction = ({ logout }: { logout: LogoutFunction }) => async ()
 
 const Root = () => {
   const { currentUser, refreshAccessToken } = useAuth()
+  
+  useEffect(() => {
+    const refresh = async () => { await refreshAccessToken() }
+    if (!currentUser) refresh().catch((error) => console.log('error while refreshing token:', error))
+  }, [])
+  
   return (
     <>
       <div className={"top-bar"}>
