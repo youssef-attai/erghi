@@ -1,32 +1,34 @@
-import React from 'react'
-import { Form, Link } from 'react-router-dom'
+import { Form, Link, redirect, useNavigation } from 'react-router-dom'
+import { LoginProps } from '../contexts/AuthContext'
+
 
 type ActionProps = {
     request: Request
 }
 
-export async function action({ request }: ActionProps) {
+// TIL: Apparently you can not use react hooks here in action handlers...
+export const action = ({ login }: LoginProps) => async ({ request }: ActionProps) => {
+    // TODO: Handle errors
+
     const formData = await request.formData()
-
-    const result = await fetch(`${import.meta.env.VITE_ERGHI_API_URL}/auth/token`, {
-        method: 'POST',
-        headers: {
-            'accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `grant_type=&username=${formData.get('username')}&password=${formData.get('password')}&scope=&client_id=&client_secret`
-    })
-
-    // TODO: Return the whole user and store the object in localStorage
-    const {access_token: accessToken} = await result.json()
-    console.log(accessToken);
     
-    // TODO: Redirect react router to the chatting route
-    return {}
+    const username: string = formData.get('username')?.toString()!
+    const password: string = formData.get('password')?.toString()!
+
+    await login(username, password)
+
+    return redirect("/chat")
 }
 
 const Login = () => {
+    // TODO: useAuth, if already authenticated then redirect to /chat
+        // TODO: In /chat, useAuth, if not authenticated redirect to here, /login
+
+    // TODO: Display some kind of loading what navigation.state === submitting
+    // const navigation = useNavigation()
+
     return (
+        // navigation.state !== 'submitting' &&
         <div className="container">
             <Form className="card" method='post'>
                 <input type="text" name="username" id="username" placeholder='username' />
