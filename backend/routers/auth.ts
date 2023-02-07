@@ -84,7 +84,7 @@ router.post("/new", async (req: Request, res: Response) => {
             sameSite: 'none',
             maxAge: REFRESH_TOKEN_EXPIRE_SECONDS
         })
-    
+
         return res.status(201).json({ accessToken })
     } catch (error) {
         console.log(error);
