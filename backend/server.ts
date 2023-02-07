@@ -1,9 +1,11 @@
 import express, { Express } from 'express'
+import cors from 'cors'
+import cookieParser from 'cookie-parser'
 
-import authRouter from './routers/auth.js';
+import authRouter from './routers/auth.js'
 
-import { PORT } from './env.js';
-import './database/database.js';
+import { PORT } from './env.js'
+import './database/database.js'
 
 const app: Express = express()
 
