@@ -12,7 +12,9 @@ const Root = () => {
           <img width={52} src="github.svg" alt="GitHub's Logo" />
         </a>
       </div>
-      <Outlet />
+      <div className="container">
+        <Outlet />
+      </div>
     </>
   )
 }
