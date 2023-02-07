@@ -79,10 +79,54 @@ router.post("/new", async (req: Request, res: Response) => {
             maxAge: REFRESH_TOKEN_EXPIRE_SECONDS
         })
     
-});
+        return res.status(201).json({ accessToken })
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(500)
+    }
+})
 
 // Request access token endpoint
 // Needs a valid refresh token in the cookies to work
+router.get("/refresh", async (req: Request, res: Response) => {
+    // Make sure a refresh token is sent
+    if (!req.cookies.refresh) return res.sendStatus(401);
+
+    const refreshToken = req.cookies.refresh;
+
+    // Get the user with this refresh token
+    const foundUser = await User.findOne({
+        refresh: refreshToken
+    })
+
+    // If no user has this refresh token, then it is invalid
+    if (!foundUser) return res.sendStatus(403);
+
+    try {
+        const decoded = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET_KEY!) as IRefreshTokenPayload
+
+        const newRefreshToken = createRefreshToken({ userId: decoded.userId })
+        const accessToken = createAccessToken({ userId: decoded.userId })
+
+        await User.updateOne({ _id: decoded.userId }, {
+            $set: {
+                refresh: newRefreshToken
+            }
+        })
+
+        res.cookie('refresh', newRefreshToken, {
+            httpOnly: true,
+            sameSite: 'none',
+            maxAge: REFRESH_TOKEN_EXPIRE_SECONDS
+        })
+
+        return res.status(200).json({ accessToken })
+    } catch (error) {
+        // Token might be expired
+        console.log(error);
+        return res.sendStatus(403)
+    }
+})
 
 // Logout endpoint
 // Removes the refresh token in the cookies from the database
