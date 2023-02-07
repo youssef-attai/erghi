@@ -86,5 +86,26 @@ router.post("/new", async (req: Request, res: Response) => {
 
 // Logout endpoint
 // Removes the refresh token in the cookies from the database
+router.get("/logout", async (req: Request, res: Response) => {
+    if (!req.cookies.refresh) return res.sendStatus(204)
+
+    const refreshToken = req.cookies.refresh
+
+    try {
+        await User.updateOne({ refresh: refreshToken }, {
+            $set: { refresh: "" }
+        })
+
+        res.clearCookie('refresh', {
+            httpOnly: true,
+            sameSite: 'none',
+        })
+
+        return res.sendStatus(204)
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(500)
+    }
+})
 
 export default router
