@@ -36,7 +36,7 @@ const AuthProvider = ({ children }: ChildrenType) => {
   // TODO: Create the sign up function like the login funciton
   // TODO: pass the signup function
 
-  const contextValue = { login }
+  const contextValue: AuthContextValue = { login, signUp, logout, refreshAccessToken, currentUser, setCurrentUser, accessToken }
 
   return (
     <AuthContext.Provider value={contextValue}>
