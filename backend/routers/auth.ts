@@ -58,9 +58,10 @@ router.post("/login", async (req: Request, res: Response) => {
             }
         })
     } catch (error) {
-
-
-    })
+        console.log(error);
+        return res.status(400)
+    }
+})
 
 // Signup endpoint
 // Creates a new user in the database
@@ -122,7 +123,7 @@ router.post("/new", async (req: Request, res: Response) => {
 // Needs a valid refresh token in the cookies to work
 router.get("/refresh", async (req: Request, res: Response) => {
     // Make sure a refresh token is sent
-    if (!req.cookies.refresh) return res.sendStatus(401);
+    if (!req.cookies.refresh) return res.status(401).json({ message: 'Unauthorized: missing refresh token' });
 
     const refreshToken = req.cookies.refresh;
 
@@ -132,7 +133,7 @@ router.get("/refresh", async (req: Request, res: Response) => {
     })
 
     // If no user has this refresh token, then it is invalid
-    if (!foundUser) return res.sendStatus(403);
+    if (!foundUser) return res.status(403).json({ message: 'Forbidden: invalid refresh token' });
 
     try {
         const decoded = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET_KEY!) as IRefreshTokenPayload
