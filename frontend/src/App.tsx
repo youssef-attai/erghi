@@ -1,39 +1,40 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
+import { ProtectedRoute } from './components/ProtectedRoute'
 import { useAuth } from './contexts/AuthContext'
-
+import Root, { logoutAction } from './Root'
 import Root from './Root'
-import Login, { action as loginAction } from './routes/Login'
+import Login from './routes/Login'
 import SignUp from './routes/SignUp'
 
 
 const App = () => {
-    // TODO: get the sign up function
-    const { login } = useAuth();
+    const { refreshAccessToken, currentUser, logout} = useAuth()
 
     const router = createBrowserRouter([
         {
-            path: "/",
+            path: '/',
             element: <Root />,
+            // loader: chatLoader({ refreshAccessToken, currentUser }),
             children: [
                 {
-                    path: "login",
-                    element: <Login />,
-                    action: loginAction({ login })
+                    index: true,
+                    element: currentUser ? <Navigate to={'/chat'} /> : <Navigate to={'/login'} />
                 },
                 {
-                    path: "signup",
+                    path: 'login',
+                    element: <Login />
+                },
+                {
+                    path: 'signup',
                     element: <SignUp />
-                    // TODO: Add signup action handler that takes the axios signup function
+                },
                 }
                 // TODO: Create and add the chatting route. Make it protected by redirecting to login if no user is stored in localStorage 
             ]
         }
     ])
 
-    return (
-        <RouterProvider router={router} />
-    )
+    return <RouterProvider router={router} />
 }
 
 export default App
