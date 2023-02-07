@@ -3,6 +3,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 
 import authRouter from './routers/auth.js'
+import roomRouter from './routers/room.js'
 
 import { PORT } from './env.js'
 import './database/database.js'
@@ -17,6 +18,7 @@ app.use(cors({
 app.use(express.json())
 
 app.use('/auth', authRouter)
+app.use('/room', roomRouter)
 
 app.listen(PORT, () => {
     console.log(`Server running on http://127.0.0.1:${PORT}`)
