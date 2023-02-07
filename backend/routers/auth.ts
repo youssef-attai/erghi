@@ -10,7 +10,41 @@ const router = Router()
 // Signup endpoint
 // Creates a new user in the database
 // Then logs the user in
-router.post("/user", (req: Request, res: Response) => {
+router.post("/new", async (req: Request, res: Response) => {
+    const { username, password } = req.body
+
+    if (!username) {
+        return res.status(400).json({ 'message': 'username field is missing' })
+    }
+
+    if (!password) {
+        return res.status(400).json({ 'message': 'password field is missing' })
+    }
+
+    try {
+        const userId = new mongoose.Types.ObjectId()
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+        const refreshToken = createRefreshToken({ userId: userId.toString() })
+        const accessToken = createAccessToken({ userId: userId.toString() })
+
+        const newUser = new User({
+            profile: {
+                username,
+                bio: "Hey, there!"
+            },
+            password: hashedPassword,
+            refresh: refreshToken
+        })
+
+        newUser._id = userId
+        await newUser.save()
+
+        res.cookie('refresh', refreshToken, {
+            httpOnly: true,
+            sameSite: 'none',
+            maxAge: REFRESH_TOKEN_EXPIRE_SECONDS
+        })
     
 });
 
