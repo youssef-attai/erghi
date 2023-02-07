@@ -39,7 +39,8 @@ router.post("/login", async (req: Request, res: Response) => {
         res.cookie('refresh', refreshToken, {
             httpOnly: true,
             sameSite: 'none',
-            maxAge: REFRESH_TOKEN_EXPIRE_SECONDS
+            maxAge: REFRESH_TOKEN_EXPIRE_SECONDS,
+            secure: true
         })
 
         return res.status(201).json({ accessToken })
@@ -84,7 +85,8 @@ router.post("/new", async (req: Request, res: Response) => {
         res.cookie('refresh', refreshToken, {
             httpOnly: true,
             sameSite: 'none',
-            maxAge: REFRESH_TOKEN_EXPIRE_SECONDS
+            maxAge: REFRESH_TOKEN_EXPIRE_SECONDS,
+            secure: true
         })
 
         return res.status(201).json({ accessToken })
@@ -125,7 +127,8 @@ router.get("/refresh", async (req: Request, res: Response) => {
         res.cookie('refresh', newRefreshToken, {
             httpOnly: true,
             sameSite: 'none',
-            maxAge: REFRESH_TOKEN_EXPIRE_SECONDS
+            maxAge: REFRESH_TOKEN_EXPIRE_SECONDS,
+            secure: true
         })
 
         return res.status(200).json({ accessToken })
@@ -151,6 +154,7 @@ router.get("/logout", async (req: Request, res: Response) => {
         res.clearCookie('refresh', {
             httpOnly: true,
             sameSite: 'none',
+            secure: true
         })
 
         return res.sendStatus(204)
