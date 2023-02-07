@@ -1,5 +1,11 @@
 import { ReactNode, useState, createContext, useContext } from "react";
 import authClient from '../authClient'
+import User from "../models/User";
+
+export type LoginFunction = (username: string, password: string) => Promise<boolean>
+export type SignUpFunction = (username: string, password: string, confirmPassword: string) => Promise<boolean>
+export type RefreshAccessTokenFunction = () => Promise<boolean>
+export type LogoutFunction = () => Promise<boolean>
 
 export type AuthContextValue = {
   login: LoginFunction
