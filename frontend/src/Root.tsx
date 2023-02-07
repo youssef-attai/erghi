@@ -1,7 +1,14 @@
-import React from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, redirect } from 'react-router-dom'
+import { LogoutFunction, useAuth } from './contexts/AuthContext'
+
+export const logoutAction = ({ logout }: { logout: LogoutFunction }) => async () => {
+  if ( await logout() ) redirect('/login')
+  else return false
+}
+
 
 const Root = () => {
+  const { currentUser, refreshAccessToken } = useAuth()
   return (
     <>
       <div className={"top-bar"}>
