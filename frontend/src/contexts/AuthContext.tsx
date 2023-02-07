@@ -1,12 +1,23 @@
 import { ReactNode, useState, createContext, useContext } from "react";
 import authClient from '../authClient'
 
-// TODO: rename this type
-export type LoginProps = {
-    // TODO: add signup function
-    login: (username: string, password: string) => Promise<boolean>
+export type AuthContextValue = {
+  login: LoginFunction
+  signUp: SignUpFunction
+  logout: LogoutFunction 
+  refreshAccessToken: RefreshAccessTokenFunction
+  currentUser: User | undefined
+  setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>
+  accessToken: string
 }
 
+const AuthContext = createContext({} as AuthContextValue)
+
+type AuthProviderProps = { children: ReactNode }
+
+const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [accessToken, setAccessToken] = useState<string>('')
+  const [currentUser, setCurrentUser] = useState<User>()
 
   const login: LoginFunction = async (username: string, password: string) => {
     const { data: { accessToken: token, user } } = await authClient.post<{ accessToken: string, user: User }>('/login', { username, password }, {
