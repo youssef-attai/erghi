@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export default mongoose.model('User', new mongoose.Schema({
+const User =  mongoose.model('User', new mongoose.Schema({
     profile: {
         type: {
             username: String,
@@ -11,7 +11,8 @@ export default mongoose.model('User', new mongoose.Schema({
     },
     rooms: {
         type: [{
-            rid: {
+            _id: false,
+            roomId: {
                 type: mongoose.Types.ObjectId,
                 ref: 'Room'
             },
@@ -31,3 +32,5 @@ export default mongoose.model('User', new mongoose.Schema({
         required: true
     }
 }));
+
+export default User
