@@ -13,19 +13,18 @@ type ChildrenType = {
   children: ReactNode
 }
 
-const AuthProvider = ({ children }: ChildrenType) => {
-  const [jwt, setJwt] = useState("")
-
-  const login = async (username: string, password: string) => {
-    // TODO: Move axios requests to a separate module of easy-to-call functions, 
-    //        e.g. accessToken = authService.login(username, password)
-    const { data } = await authClient.post('/login', { username, password }, {
+  const signUp: SignUpFunction = async (username: string, password: string, confirmPassword: string) => {
+    const { data: { accessToken: token, user } } = await authClient.post<{ accessToken: string, user: User }>('/new', { username, password }, {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json"
       },
     })
-    const { accessToken } = data
+
+    setAccessToken(token)
+    setCurrentUser(user)
+    return true
+  }
 
   const refreshAccessToken: RefreshAccessTokenFunction = async () => {
     try {
