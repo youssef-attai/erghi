@@ -27,10 +27,20 @@ const AuthProvider = ({ children }: ChildrenType) => {
     })
     const { accessToken } = data
 
-    setJwt(accessToken)
+  const refreshAccessToken: RefreshAccessTokenFunction = async () => {
+    try {
+      const { data: { accessToken: token, user } } = await authClient.get<{ accessToken: string, user: User }>('/refresh', {
+        headers: {
+          "Accept": "application/json"
+        }
+      })
 
-    // return success/fail for login action handler
-    return true
+      setAccessToken(token)
+      setCurrentUser(user)
+      return true
+    } catch (error) {
+      return false;
+    }
   }
 
   const logout: LogoutFunction = async () => {
