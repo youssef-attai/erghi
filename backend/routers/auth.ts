@@ -20,4 +20,4 @@ router.post("/user", (req: Request, res: Response) => {
 // Logout endpoint
 // Removes the refresh token in the cookies from the database
 
-export default router;
+export default router
