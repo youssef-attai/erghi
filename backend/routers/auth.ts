@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express'
 
-const router = Router();
+const router = Router()
 
 // Login endpoint
 // Returns a new refresh token and an access token
