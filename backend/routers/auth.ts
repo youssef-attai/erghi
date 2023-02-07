@@ -36,6 +36,10 @@ router.post("/login", async (req: Request, res: Response) => {
             $set: { refresh: refreshToken }
         })
 
+        const userRooms = await Room.find({
+            _id: { $in: foundUser.rooms.map(r => r.roomId) }
+        })
+
         res.cookie('refresh', refreshToken, {
             httpOnly: true,
             sameSite: 'none',
@@ -43,7 +47,16 @@ router.post("/login", async (req: Request, res: Response) => {
             secure: true
         })
 
-        return res.status(201).json({ accessToken })
+        return res.status(201).json({
+            accessToken,
+            user: {
+                profile: {
+                    username: foundUser.profile.username,
+                    bio: foundUser.profile.bio
+                },
+                rooms: userRooms.map(r => { return { members: r.members, roomName: r.roomName, roomId: r._id.toString()}} )
+            }
+        })
     } catch (error) {
 
 
@@ -89,7 +102,16 @@ router.post("/new", async (req: Request, res: Response) => {
             secure: true
         })
 
-        return res.status(201).json({ accessToken })
+        return res.status(201).json({
+            accessToken,
+            user: {
+                profile: {
+                    username: newUser.profile.username,
+                    bio: newUser.profile.bio
+                },
+                rooms: []
+            }
+        })
     } catch (error) {
         console.log(error);
         return res.sendStatus(500)
@@ -124,6 +146,10 @@ router.get("/refresh", async (req: Request, res: Response) => {
             }
         })
 
+        const userRooms = await Room.find({
+            _id: { $in: foundUser.rooms.map(r => r.roomId) }
+        })
+
         res.cookie('refresh', newRefreshToken, {
             httpOnly: true,
             sameSite: 'none',
@@ -131,7 +157,16 @@ router.get("/refresh", async (req: Request, res: Response) => {
             secure: true
         })
 
-        return res.status(200).json({ accessToken })
+        return res.status(200).json({
+            accessToken,
+            user: {
+                profile: {
+                    username: foundUser.profile.username,
+                    bio: foundUser.profile.bio
+                },
+                rooms: userRooms.map(r => { return { members: r.members, roomName: r.roomName, roomId: r._id.toString()}} )
+            }
+        })
     } catch (error) {
         // Token might be expired
         console.log(error);
