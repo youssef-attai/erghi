@@ -44,8 +44,10 @@ const App = () => {
                         }
                     ]
                 },
+                {
+                    path: 'logout',
+                    action: logoutAction({ logout })
                 }
-                // TODO: Create and add the chatting route. Make it protected by redirecting to login if no user is stored in localStorage 
             ]
         }
     ])
