@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 import { MONGO_URI } from "./env.js";
+
+mongoose.set('strictQuery', true);
+
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(MONGO_URI, {
