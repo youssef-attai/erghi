@@ -5,10 +5,15 @@ export async function createAccount(req, res) {
     const { username, password } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    try {
         const newUser = new User({ username, password: hashedPassword });
     await newUser.save();
 
     res.send(`welcome, ${newUser.username}`);
+    } catch (error) {
+        res.status(409).send('username already exists');
+    }
 }
 
 export async function login(req, res) {
