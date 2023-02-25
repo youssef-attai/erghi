@@ -1,8 +1,12 @@
+import Chat from "./components/Chat"
+import Login from "./components/Login";
+import { useAuth } from "./contexts/AuthContext"
 function App() {
+  const { user, getCurrentUser } = useAuth();
   return (
-   <>
-    <h1>React TypeScript</h1>
-   </> 
+    <>
+      {user ? (<Chat />) : (<Login />)}
+    </>
   )
 }
 
