@@ -1,96 +1,63 @@
-import { ReactNode, useState, createContext, useContext } from "react";
-import authClient from '../authClient'
-import User from "../models/User";
+import { createContext, PropsWithChildren, useContext, useState } from 'react';
+import authAPI from '../api/auth';
 
-export type LoginFunction = (username: string, password: string) => Promise<boolean>
-export type SignUpFunction = (username: string, password: string, confirmPassword: string) => Promise<boolean>
-export type RefreshAccessTokenFunction = () => Promise<boolean>
-export type LogoutFunction = () => Promise<boolean>
+type User = {
+  username: string;
+};
 
-export type AuthContextValue = {
-  login: LoginFunction
-  signUp: SignUpFunction
-  logout: LogoutFunction 
-  refreshAccessToken: RefreshAccessTokenFunction
-  currentUser: User | undefined
-  setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>
-  accessToken: string
-}
+type AuthContextType = {
+  user: User | null;
+  setUser: (user: User | null) => void;
+  login: (username: string, password: string) => Promise<void>;
+  getCurrentUser: () => Promise<void>;
+  logout: () => Promise<void>;
+};
 
-const AuthContext = createContext({} as AuthContextValue)
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  setUser: () => { },
+  login: () => Promise.resolve(),
+  getCurrentUser: () => Promise.resolve(),
+  logout: () => Promise.resolve(),
+});
 
-type AuthProviderProps = { children: ReactNode }
+const AuthProvider = ({ children }: PropsWithChildren) => {
+  const [user, setUser] = useState<User | null>(null);
 
-const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [accessToken, setAccessToken] = useState<string>('')
-  const [currentUser, setCurrentUser] = useState<User>()
-
-  const login: LoginFunction = async (username: string, password: string) => {
-    const { data: { accessToken: token, user } } = await authClient.post<{ accessToken: string, user: User }>('/login', { username, password }, {
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      },
-    })
-
-    setAccessToken(token)
-    setCurrentUser(user)
-    return true
-  }
-
-  const signUp: SignUpFunction = async (username: string, password: string, confirmPassword: string) => {
-    const { data: { accessToken: token, user } } = await authClient.post<{ accessToken: string, user: User }>('/new', { username, password }, {
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      },
-    })
-
-    setAccessToken(token)
-    setCurrentUser(user)
-    return true
-  }
-
-  const refreshAccessToken: RefreshAccessTokenFunction = async () => {
+  const login = async (username: string, password: string) => {
     try {
-      const { data: { accessToken: token, user } } = await authClient.get<{ accessToken: string, user: User }>('/refresh', {
-        headers: {
-          "Accept": "application/json"
-        }
-      })
-
-      setAccessToken(token)
-      setCurrentUser(user)
-      return true
-    } catch (error) {
-      return false;
+      const { data } = await authAPI.post('/login', { username, password });
+      setUser({ username: data.username });
+    } catch (error: any) {
+      throw { message: error.response.data.message };
     }
-  }
+  };
 
-  const logout: LogoutFunction = async () => {
+  const getCurrentUser = async () => {
     try {
-      await authClient.get('/logout')
-
-      setAccessToken('')
-      setCurrentUser(undefined)
-
-      return true
-    } catch (error) {
-      return false
+      const { data } = await authAPI.get('/me');
+      setUser({ username: data.username });
+    } catch (error: any) {
+      throw { message: error.response.data.message };
     }
-  }
+  };
 
-  const contextValue: AuthContextValue = { login, signUp, logout, refreshAccessToken, currentUser, setCurrentUser, accessToken }
+  const logout = async () => {
+    try {
+      await authAPI.get('/logout');
+      setUser(null);
+    } catch (error: any) {
+      throw { message: error.response.data.message };
+    }
+  };
 
   return (
-    <AuthContext.Provider value={contextValue}>
+    <AuthContext.Provider value={{ user, setUser, login, getCurrentUser, logout }}>
       {children}
     </AuthContext.Provider>
-  )
-}
+  );
+};
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-}
+const useAuth = () => useContext(AuthContext);
 
-export default AuthProvider
+export { AuthProvider, useAuth };

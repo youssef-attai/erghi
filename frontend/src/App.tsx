@@ -1,58 +1,22 @@
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
-import { ProtectedRoute } from './components/ProtectedRoute'
-import { useAuth } from './contexts/AuthContext'
-import Root, { logoutAction } from './Root'
-import Chat, { loader as chatLoader } from './routes/Chat'
-import Login from './routes/Login'
-import SignUp from './routes/SignUp'
+import { useAsync } from "@youssef-attai/useful-hooks";
+import { useEffect } from "react";
+import Chat from "./components/Chat"
+import Login from "./components/Login";
+import { useAuth } from "./contexts/AuthContext"
 
+function App() {
+  const { user, getCurrentUser } = useAuth();
+  const { execute: execGetCurrentUser, status, error } = useAsync(getCurrentUser);
 
-const App = () => {
-    const { refreshAccessToken, currentUser, logout} = useAuth()
+  useEffect(() => {
+    execGetCurrentUser();
+  }, []);
 
-    const router = createBrowserRouter([
-        {
-            path: '/',
-            element: <Root />,
-            // loader: chatLoader({ refreshAccessToken, currentUser }),
-            children: [
-                {
-                    index: true,
-                    element: currentUser ? <Navigate to={'/chat'} /> : <Navigate to={'/login'} />
-                },
-                {
-                    path: 'login',
-                    element: <Login />
-                },
-                {
-                    path: 'signup',
-                    element: <SignUp />
-                },
-                {
-                    path: 'chat',
-                    element: <ProtectedRoute><Chat /></ProtectedRoute>,
-                    children: [
-                        {
-                            path: ':roomId',
-                            element: (
-                                // Chat room
-                                <>
-                                    <div className="messages-area"></div>
-                                    <input type="text" name="message" id="messsage" placeholder='type your message here' />
-                                </>
-                            )
-                        }
-                    ]
-                },
-                {
-                    path: 'logout',
-                    action: logoutAction({ logout })
-                }
-            ]
-        }
-    ])
-
-    return <RouterProvider router={router} />
+  return (
+    <>
+      {user ? (<Chat />) : (<Login />)}
+    </>
+  )
 }
 
 export default App
