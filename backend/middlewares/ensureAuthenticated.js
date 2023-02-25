@@ -1,4 +1,4 @@
-export function ensureAuthenticated(req, res, next) {
+export default function ensureAuthenticated(req, res, next) {
     if (!req.session.userId) {
         return res.sendStatus(401);
     }
