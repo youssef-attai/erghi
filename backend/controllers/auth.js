@@ -21,16 +21,10 @@ export async function login(req, res) {
     const { username, password } = req.body;
 
     const foundUser = await User.findOne({ username });
-    if (!foundUser) {
-        res.send('Invalid username');
-        return;
-    }
+    if (!foundUser) return res.status(400).json({ message: 'invalid username' });
 
     const passwordMatch = await bcrypt.compare(password, foundUser.password);
-    if (!passwordMatch) {
-        res.send('Invalid password');
-        return;
-    }
+    if (!passwordMatch) return res.status(400).json({ message: 'invalid password' });
 
     req.session.userId = foundUser._id.toString();
     res.json({ username: foundUser.username });
