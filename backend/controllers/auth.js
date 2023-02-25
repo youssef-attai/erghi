@@ -1,9 +1,11 @@
 import User from "../models/User.js";
+import bcrypt from "bcrypt";
 
 export async function createAccount(req, res) {
     const { username, password } = req.body;
 
-    const newUser = new User({ username, password });
+    const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = new User({ username, password: hashedPassword });
     await newUser.save();
 
     res.send(`welcome, ${newUser.username}`);
@@ -14,8 +16,9 @@ export async function login(req, res) {
 
     const result = await User.findOne({ username, password });
 
-    if (!result) {
-        res.send('Invalid username or password');
+    const passwordMatch = await bcrypt.compare(password, foundUser.password);
+    if (!passwordMatch) {
+        res.send('Invalid password');
         return;
     }
 
