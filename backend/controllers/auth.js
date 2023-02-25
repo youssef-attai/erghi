@@ -33,6 +33,8 @@ export async function login(req, res) {
     }
 
     req.session.userId = foundUser._id.toString();
+    res.json({ username: foundUser.username });
+}
 
 export function logout(req, res) {
     const _id = req.session.userId;
