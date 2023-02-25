@@ -8,10 +8,10 @@ export async function createAccount(req, res) {
 
     try {
         const newUser = new User({ username, password: hashedPassword });
-    await newUser.save();
+        await newUser.save();
 
         req.session.userId = newUser._id.toString();
-    res.send(`welcome, ${newUser.username}`);
+        res.send(`welcome, ${newUser.username}`);
     } catch (error) {
         res.status(409).send('username already exists');
     }
