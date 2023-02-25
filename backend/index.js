@@ -2,7 +2,7 @@ import express from "express";
 import sessions from 'express-session';
 import connectDB from "./database.js";
 import authRouter from "./routers/auth.js";
-import { SESSION_SECRET } from './env.js';
+import { PORT, SESSION_SECRET } from './env.js';
 
 connectDB();
 
@@ -22,6 +22,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/auth', authRouter);
 
-app.listen(3000, () => {
-    console.log('Server started: http://localhost:3000');
+app.listen(PORT, () => {
+    console.log(`Server started: http://localhost:${PORT}`);
 });
