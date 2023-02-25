@@ -15,7 +15,7 @@ app.use(sessions({
         // secure: true,
         httpOnly: true
     },
-    resave: true,
+    resave: false,
     saveUninitialized: false,
 }));
 
