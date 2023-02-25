@@ -10,3 +10,11 @@ export function ensureFieldsExist(...fields) {
         next();
     }
 }
+
+export function ensureAuthenticated(req, res, next) {
+    if (!req.session.userId) {
+        return res.sendStatus(401);
+    }
+
+    next();
+}
