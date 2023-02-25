@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { createAccount, login, logout } from "../controllers/auth.js";
-import { ensureAuthenticated, ensureFieldsExist } from "../middlewares.js";
+import ensureAuthenticated from "../middlewares/ensureAuthenticated.js";
+import ensureFieldsExist from "../middlewares/ensureFieldsExist.js";
 
 const router = Router();
 
