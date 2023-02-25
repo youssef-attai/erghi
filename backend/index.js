@@ -31,6 +31,10 @@ app.use(sessions({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors({
+    origin: CLIENT_ADDRESS,
+    credentials: true
+}));
 
 app.use('/auth', authRouter);
 
