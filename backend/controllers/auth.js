@@ -36,7 +36,9 @@ export async function login(req, res) {
     res.send(`welcome back, ${foundUser.username}`);
 }
 
-export function logout(req, res) {
+export async function logout(req, res) {
+    const _id = req.session.userId;
+    const { username } = await User.findOne({ _id });
     req.session.destroy();
-    res.send('goodbye');
+    res.send(`goodbye, ${username}`);
 } 
