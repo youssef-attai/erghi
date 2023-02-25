@@ -20,7 +20,11 @@ export async function createAccount(req, res) {
 export async function login(req, res) {
     const { username, password } = req.body;
 
-    const result = await User.findOne({ username, password });
+    const foundUser = await User.findOne({ username });
+    if (!foundUser) {
+        res.send('Invalid username');
+        return;
+    }
 
     const passwordMatch = await bcrypt.compare(password, foundUser.password);
     if (!passwordMatch) {
@@ -28,8 +32,8 @@ export async function login(req, res) {
         return;
     }
 
-    req.session.userId = result._id.toString();
-    res.send(`welcome back, ${result.username}`);
+    req.session.userId = foundUser._id.toString();
+    res.send(`welcome back, ${foundUser.username}`);
 }
 
 export function logout(req, res) {
