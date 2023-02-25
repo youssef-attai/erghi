@@ -1,5 +1,9 @@
 import express from "express";
 import sessions from 'express-session';
+import connectDB from "./database.js";
+
+connectDB();
+
 const app = express();
 
 app.use(express.json());
