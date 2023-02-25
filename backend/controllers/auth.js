@@ -33,7 +33,13 @@ export async function login(req, res) {
     }
 
     req.session.userId = foundUser._id.toString();
-    res.send(`welcome back, ${foundUser.username}`);
+
+export function logout(req, res) {
+    const _id = req.session.userId;
+    req.session.destroy(() => {
+        console.log('session destroyed');
+    });
+    res.json({ message: `user ${_id} logged out` });
 }
 
 export async function me(req, res) {
