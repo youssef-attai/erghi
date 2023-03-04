@@ -6,9 +6,7 @@ import fieldsExist from "../middlewares/fieldsExist.js";
 const router = Router();
 
 router.post('/create', fieldsExist('username', 'password'), createAccount);
-
 router.post('/login', fieldsExist('username', 'password'), login);
-
 router.get('/logout', isAuthenticated, logout);
 router.get('/me', isAuthenticated, me);
 
