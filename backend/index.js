@@ -31,6 +31,7 @@ app.use(sessions({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.use(cors({
     origin: CLIENT_ADDRESS,
     credentials: true
@@ -39,15 +40,17 @@ app.use(cors({
 app.use('/auth', authRouter);
 
 io.on('connection', (socket) => {
-    console.log('A user connected: ', socket.id);
+    const username = socket.handshake.query.username;
+    
+    console.log('[CONNECTED]   ', username, socket.id);
 
     socket.on('message', (data) => {
-        console.log('Received message:', data);
+        console.log(username, socket.id, ':', data);
         io.emit('message', data);
     });
 
     socket.on('disconnect', () => {
-        console.log('A user disconnected: ', socket.id);
+        console.log('[DISCONNECTED]', username, socket.id);
     });
 });
 
