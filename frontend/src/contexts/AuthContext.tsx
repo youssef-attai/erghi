@@ -13,13 +13,7 @@ type AuthContextType = {
   logout: () => Promise<void>;
 };
 
-const AuthContext = createContext<AuthContextType>({
-  user: null,
-  setUser: () => { },
-  login: () => Promise.resolve(),
-  getCurrentUser: () => Promise.resolve(),
-  logout: () => Promise.resolve(),
-});
+const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User | null>(null);
