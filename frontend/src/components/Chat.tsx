@@ -6,7 +6,7 @@ function Chat() {
     const { user, logout } = useAuth();
 
     const messageRef = useRef<HTMLInputElement | null>(null);
-    const { messages, sendMessage } = useChat('http://localhost:3000');
+    const { messages, sendMessage } = useChat();
 
     const handleSendMessage = (e: React.FormEvent) => {
         e.preventDefault();

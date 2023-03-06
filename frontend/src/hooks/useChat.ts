@@ -8,7 +8,8 @@ interface ChatState {
 
 const useChat = (url: string): ChatState => {
   const [messages, setMessages] = useState<string[]>([]);
-  const socket = useSocket(url);
+
+  const socket = useSocket('http://localhost:3000');
 
   const sendMessage = useCallback((message: string) => {
     if (socket) {
