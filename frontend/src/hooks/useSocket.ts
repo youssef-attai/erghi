@@ -1,12 +1,19 @@
 import { useRef, useEffect, useState } from 'react';
 import io, { Socket } from 'socket.io-client';
+import { useAuth } from '../contexts/AuthContext';
 
 const useSocket = (url: string): Socket | null => {
+  const { user } = useAuth();
   const [isConnected, setIsConnected] = useState(false);
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    const socket = io(url);
+    const socket = io(url, {
+      query: {
+        // TODO: Use an auth token instead of username
+        username: user?.username
+      }
+    });
     socketRef.current = socket;
 
     const onConnect = () => {
