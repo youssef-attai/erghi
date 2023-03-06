@@ -6,7 +6,8 @@ interface ChatState {
   sendMessage: (message: string) => void;
 }
 
-const useChat = (url: string): ChatState => {
+const useChat = (): ChatState => {
+  // Create rooms instead of a single chat
   const [messages, setMessages] = useState<string[]>([]);
 
   const socket = useSocket('http://localhost:3000');
@@ -15,7 +16,7 @@ const useChat = (url: string): ChatState => {
     if (socket) {
       socket.emit('message', message);
     } else {
-      console.log('socket not connected');
+      console.log('send message failed, socket not connected');
     }
   }, [socket]);
 
