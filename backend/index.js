@@ -1,5 +1,6 @@
 import express from "express";
 import sessions from 'express-session';
+import setupSocketIO from "./socket.js";
 import connectDB from "./database.js";
 import authRouter from "./routers/auth.js";
 import { CLIENT_ADDRESS, PORT, SESSION_SECRET } from './env.js';
@@ -39,21 +40,7 @@ app.use(cors({
 
 app.use('/auth', authRouter);
 
-io.on('connection', (socket) => {
-    const username = socket.handshake.query.username;
-    
-    console.log('[CONNECTED]   ', username, socket.id);
-
-    socket.on('message', (data) => {
-        console.log(username, socket.id, ':', data);
-        io.emit('message', data);
-    });
-
-    socket.on('disconnect', () => {
-        console.log('[DISCONNECTED]', username, socket.id);
-    });
-});
-
+setupSocketIO(io);
 
 server.listen(PORT, () => {
     console.log(`Server started: http://localhost:${PORT}`);
