@@ -10,7 +10,7 @@ const useChat = (): ChatState => {
   // Create rooms instead of a single chat
   const [messages, setMessages] = useState<string[]>([]);
 
-  const socket = useSocket('http://localhost:3000');
+  const socket = useSocket(import.meta.env.VITE_SOCKET_URL);
 
   const sendMessage = useCallback((message: string) => {
     if (socket) {
