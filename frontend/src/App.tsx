@@ -5,11 +5,11 @@ import Login from "./components/Login";
 import { useAuth } from "./contexts/AuthContext"
 
 function App() {
-  const { user, getCurrentUser } = useAuth();
-  const { execute: execGetCurrentUser, status, error } = useAsync(getCurrentUser);
+  const { user, me } = useAuth();
+  const { execute: getMe, status, error } = useAsync(me);
 
   useEffect(() => {
-    execGetCurrentUser();
+    getMe();
   }, []);
 
   return (
