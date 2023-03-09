@@ -9,7 +9,7 @@ type AuthContextType = {
   user: User | null;
   setUser: (user: User | null) => void;
   login: (username: string, password: string) => Promise<void>;
-  getCurrentUser: () => Promise<void>;
+  me: () => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -27,7 +27,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
-  const getCurrentUser = async () => {
+  const me = async () => {
     try {
       const { data } = await authAPI.get('/me');
       setUser({ username: data.username });
@@ -46,7 +46,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, login, getCurrentUser, logout }}>
+    <AuthContext.Provider value={{ user, setUser, login, me, logout }}>
       {children}
     </AuthContext.Provider>
   );
