@@ -1,4 +1,4 @@
-export default function (...fields) {
+export default function fieldsExist(...fields) {
     return function middleware(req, res, next) {
         for (const field of fields) {
             if (!req.body[field]) {
