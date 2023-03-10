@@ -40,7 +40,7 @@ app.use(cors({
 }));
 
 app.use('/auth', authRouter);
-app.use('/room', roomRouter);
+app.use('/rooms', roomRouter);
 
 setupSocketIO(io);
 
