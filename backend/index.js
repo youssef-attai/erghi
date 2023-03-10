@@ -3,6 +3,7 @@ import sessions from 'express-session';
 import setupSocketIO from "./socket.js";
 import connectDB from "./database.js";
 import authRouter from "./routers/auth.js";
+import roomRouter from "./routers/room.js";
 import { CLIENT_ADDRESS, PORT, SESSION_SECRET } from './env.js';
 import http from 'http';
 import { Server } from 'socket.io';
@@ -39,6 +40,7 @@ app.use(cors({
 }));
 
 app.use('/auth', authRouter);
+app.use('/room', roomRouter);
 
 setupSocketIO(io);
 
