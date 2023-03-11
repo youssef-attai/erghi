@@ -28,7 +28,9 @@ export async function login(req, res) {
     if (!passwordMatch) return res.status(400).json({ message: 'invalid password' });
 
     req.session.userId = foundUser._id.toString();
-    res.json({ username: foundUser.username });
+    
+    const rooms = await Room.find({ users: _id }, { name: 1, _id: 1 });
+    res.json({ username: foundUser.username, rooms });
 }
 
 export function logout(req, res) {
