@@ -23,7 +23,7 @@ const roomSchema = new mongoose.Schema({
         required: true,
         default: [],
     },
-    members: {
+    users: {
         type: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
