@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
+import Room from "../models/Room.js";
 
 export async function createAccount(req, res) {
     const { username, password } = req.body;
@@ -41,5 +42,6 @@ export function logout(req, res) {
 export async function me(req, res) {
     const _id = req.session.userId;
     const { username } = await User.findOne({ _id });
-    res.json({ username });
+    const rooms = await Room.find({ users: _id }, { name: 1, _id: 1 });
+    res.json({ username, rooms });
 }
