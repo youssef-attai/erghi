@@ -1,8 +1,9 @@
-import { createContext, PropsWithChildren, useContext, useState } from 'react';
-import authAPI from '../api/auth';
+import { createContext, PropsWithChildren, useContext, useState } from "react";
+import authAPI from "../api/auth";
 
 type User = {
   username: string;
+  id: string;
 };
 
 type AuthContextType = {
@@ -20,8 +21,8 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const login = async (username: string, password: string) => {
     try {
-      const { data } = await authAPI.post('/login', { username, password });
-      setUser({ username: data.username });
+      const { data } = await authAPI.post("/login", { username, password });
+      setUser({ username: data.username, id: data.id });
     } catch (error: any) {
       throw { message: error.response.data.message };
     }
@@ -29,8 +30,8 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const me = async () => {
     try {
-      const { data } = await authAPI.get('/me');
-      setUser({ username: data.username });
+      const { data } = await authAPI.get("/me");
+      setUser({ username: data.username, id: data.id });
     } catch (error: any) {
       throw { message: error.response.data.message };
     }
@@ -38,7 +39,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const logout = async () => {
     try {
-      await authAPI.get('/logout');
+      await authAPI.get("/logout");
       setUser(null);
     } catch (error: any) {
       throw { message: error.response.data.message };
