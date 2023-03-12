@@ -1,49 +1,52 @@
 import express from "express";
-import sessions from 'express-session';
-import setupSocketIO from "./socket.js";
-import connectDB from "./database.js";
+import sessions from "express-session";
+import handleSocketConnections from "./socket.js";
+import establishConnection from "./database.js";
 import authRouter from "./routers/auth.js";
 import roomRouter from "./routers/room.js";
-import { CLIENT_ADDRESS, PORT, SESSION_SECRET } from './env.js';
-import http from 'http';
-import { Server } from 'socket.io';
-import cors from 'cors';
+import { CLIENT_ADDRESS, PORT, SESSION_SECRET } from "./env.js";
+import http from "http";
+import { Server } from "socket.io";
+import cors from "cors";
 
-
-connectDB();
+establishConnection();
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-    cors: {
-        origin: CLIENT_ADDRESS
-    }
+  cors: {
+    origin: CLIENT_ADDRESS,
+  },
 });
 
-app.use(sessions({
+app.use(
+  sessions({
     secret: SESSION_SECRET,
     cookie: {
-        maxAge: 1000 * 60 * 60 * 24,
-        // secure: true,
-        httpOnly: true
+      maxAge: 1000 * 60 * 60 * 24,
+      // secure: true,
+      httpOnly: true,
     },
     resave: false,
     saveUninitialized: false,
-}));
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors({
+app.use(
+  cors({
     origin: CLIENT_ADDRESS,
-    credentials: true
-}));
+    credentials: true,
+  })
+);
 
-app.use('/auth', authRouter);
-app.use('/rooms', roomRouter);
+app.use("/auth", authRouter);
+app.use("/rooms", roomRouter);
 
-setupSocketIO(io);
+handleSocketConnections(io);
 
 server.listen(PORT, () => {
-    console.log(`Server started: http://localhost:${PORT}`);
+  console.log(`Server running on: http://localhost:${PORT}`);
 });
