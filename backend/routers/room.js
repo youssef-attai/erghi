@@ -13,10 +13,11 @@ router.get("/", isAuthenticated, async (req, res) => {
   return res.json({ rooms });
 });
 
-router.post('/', isAuthenticated, (req, res) => {
-  // TODO: Create a new room 
-  // TODO: Add the current user to the room
-  // TODO: Return the new room's id
+router.get("/:id", isAuthenticated, async (req, res) => {
+  const room = await Room.findById(req.params.id);
+  return res.json({ room });
+});
+
 });
 
 router.post('/:id/join', isAuthenticated, (req, res) => {
