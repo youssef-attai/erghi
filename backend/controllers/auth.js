@@ -12,11 +12,9 @@ export async function createAccount(req, res) {
 
     req.session.userId = newUser._id.toString();
 
-    // TODO: Return proper response
-    res.send(`welcome, ${newUser.username}`);
+    res.json({ username: newUser.username, id: req.session.userId});
   } catch (error) {
-    // TODO: Return proper response
-    res.status(409).send("username already exists");
+    res.status(409).json({ message: "username already exists" });
   }
 }
 
