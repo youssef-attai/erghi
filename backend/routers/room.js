@@ -18,6 +18,13 @@ router.get("/:id", isAuthenticated, async (req, res) => {
   return res.json({ room });
 });
 
+router.post("/", isAuthenticated, async (req, res) => {
+  const room = new Room({
+    roomName: req.body.roomName,
+    users: [req.session.userId],
+  });
+  await room.save();
+  return res.json({ room });
 });
 
 router.post('/:id/join', isAuthenticated, (req, res) => {
