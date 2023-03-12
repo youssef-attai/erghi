@@ -27,8 +27,13 @@ router.post("/", isAuthenticated, async (req, res) => {
   return res.json({ room });
 });
 
-router.post('/:id/join', isAuthenticated, (req, res) => {
-  // TODO: Add the current user to the room with the given id
+router.post("/:id/join", isAuthenticated, async (req, res) => {
+  await Room.findByIdAndUpdate(req.params.id, {
+    $push: { users: req.session.userId },
+  });
+  return res.json({
+    message: `${req.session.id} joined room ${req.params.id}`,
+  });
 });
 
 export default router;
