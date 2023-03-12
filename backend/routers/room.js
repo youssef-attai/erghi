@@ -4,15 +4,13 @@ import Room from "../models/Room.js";
 
 const router = Router();
 
-// Might me redundant
-// router.get('/', isAuthenticated, (req, res) => {
-//   // TODO: Get the current user's rooms from the database (Name and id only)
-//   // TODO: Return the rooms
-// });
+router.get("/", isAuthenticated, async (req, res) => {
+  const rooms = await Room.find(
+    { users: req.session.userId },
+    { _id: 1, roomName: 1 }
+  );
 
-router.get('/:id', isAuthenticated, (req, res) => {
-  // TODO: Get the room with the given id from the database (With everything)
-  // TODO: Return the room
+  return res.json({ rooms });
 });
 
 router.post('/', isAuthenticated, (req, res) => {
