@@ -1,6 +1,6 @@
 import Room from './models/Room.js';
 
-export default function setupSocketIO(io) {
+export default function handleSocketConnections(io) {
     io.on('connection', async (socket) => {
         const rooms = await Room.find({ users: socket.handshake.query.userId }, { _id: 1 }); 
 
